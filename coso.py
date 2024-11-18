@@ -76,14 +76,29 @@ def calcular_distancia(ruta, distancias):
 
 # Función para graficar la mejor ruta
 def graficar_ruta(mejor_ruta, coordenadas):
+    # Obtener las coordenadas de la ruta
     ruta_coordenadas = coordenadas[mejor_ruta]
+    
+    # Configuración de la figura
     plt.figure(figsize=(8, 6))
-    plt.plot(ruta_coordenadas[:, 0], ruta_coordenadas[:, 1], marker='o', linestyle='-', color='b')
+    
+    # Graficar las líneas entre los nodos
+    plt.plot(ruta_coordenadas[:, 0], ruta_coordenadas[:, 1], marker='o', linestyle='-', color='b', label='Ruta')
+    
+    # Añadir etiquetas a los nodos
+    for idx, (x, y) in enumerate(ruta_coordenadas):
+        plt.text(x, y, f'{mejor_ruta[idx]}', fontsize=10, color='red', ha='center', va='center', bbox=dict(facecolor='white', edgecolor='red', boxstyle='circle'))
+    
+    # Personalización del gráfico
     plt.title("Ruta Óptima Encontrada")
     plt.xlabel("X")
     plt.ylabel("Y")
     plt.grid(True)
+    plt.legend()
+    
+    # Mostrar la gráfica
     plt.show()
+
 
 # Función para ejecutar el algoritmo utilizando múltiples núcleos
 def ejecutar_en_multiproceso(distancias, coordenadas, num_hormigas, num_iteraciones, num_nodos, alpha, beta, rho, Q, num_nucleos):
@@ -100,23 +115,24 @@ def ejecutar_en_multiproceso(distancias, coordenadas, num_hormigas, num_iteracio
 # Asegurarse de que el código solo se ejecute cuando no sea importado como un módulo
 if __name__ == "__main__":
     # Cargar datos de los archivos
-    distancias, coordenadas = cargar_datos('Cordenadas\Dist4.txt', 'Cordenadas\Coord1.txt')
+    distancias, coordenadas = cargar_datos('Cordenadas\Dist4.txt', 'Cordenadas\Coord4.txt')
 
     # Parámetros
-    num_hormigas = 100
-    num_iteraciones = 100
+    num_hormigas = 200
+    num_iteraciones = 90
     num_nodos = len(distancias)
     alpha = 1    # Influencia de la feromona
-    beta = 2     # Influencia de la visibilidad (1/distance)
-    rho = 0.1    # Factor de evaporación
-    Q = 1        # Cantidad de feromona depositada por las hormigas
-    num_nucleos = 6  # Usar todos los núcleos disponibles
+    beta = 3.3     # Influencia de la visibilidad (1/distance)
+    rho = 0.7    # Factor de evaporación
+    Q = 1.2        # Cantidad de feromona depositada por las hormigas
+    num_nucleos = 7  # Usar todos los núcleos disponibles
 
     # Ejecutar el algoritmo con múltiples núcleos
     mejor_ruta, mejor_distancia = ejecutar_en_multiproceso(distancias, coordenadas, num_hormigas, num_iteraciones, num_nodos, alpha, beta, rho, Q, num_nucleos)
-
+    if mejor_ruta[0] != mejor_ruta[len(mejor_ruta)-1]:
+        mejor_ruta.append(mejor_ruta[0])
     # Mostrar la mejor ruta y distancia
-    print(f"Mejor Ruta: {mejor_ruta}")
+    print(f"Mejor Ruta: {[int(nodo) for nodo in mejor_ruta]}")
     print(f"Distancia de la Mejor Ruta: {mejor_distancia}")
 
     # Graficar la mejor ruta
