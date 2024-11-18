@@ -91,7 +91,7 @@ class ColoniaHormigas:
 coordenadas = leer_coordenadas('coordenadas.txt')
 distancias = leer_distancias('distancias.txt')
 
-aco = ColoniaHormigas(num_hormigas=10, num_iteraciones=100, alpha=1, beta=2, rho=0.1, distancias=distancias)
+aco = ColoniaHormigas(num_hormigas=200, num_iteraciones=50, alpha=4, beta=2, rho=0.2, distancias=distancias)
 mejor_ruta, menor_costo = aco.ejecutar()
 
 print("Mejor ruta:", mejor_ruta)
@@ -118,9 +118,6 @@ def vecino_mas_proximo(distancias, inicio=0):
     visitados.append(inicio)
     
     return visitados, costo_total
-# Leer datos
-coordenadas = leer_coordenadas('coordenadas.txt')
-distancias = leer_distancias('distancias.txt')
 
 # Ejecutar el algoritmo
 inicio = 0  # Nodo de inicio
